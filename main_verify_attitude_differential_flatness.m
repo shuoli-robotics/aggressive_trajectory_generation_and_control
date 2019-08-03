@@ -54,12 +54,12 @@ for i = 1:(tf-t0)/time_step-1
     
     x_b = cross(y_c,alpha)/norm(cross(y_c,alpha));
     y_b = cross(beta,x_b)/norm(cross(beta,x_b));
-    z_b = cross(x_b,y_b);
+    z_b = cross(y_b,x_b);
     R = [x_b y_b z_b];
     R = R';
     eul = rotm2eul(R);
     phi = eul(3);
-    theta = -eul(2);
+    theta = eul(2);
     psi = eul(1);
     T = z_b' * (a-g*z_w-dz*v);
     states(i+1,:) =  states(i,:) + time_step * drone_model_attitude(states(i,:),[phi theta psi T])';

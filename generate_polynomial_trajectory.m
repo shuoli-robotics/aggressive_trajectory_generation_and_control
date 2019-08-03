@@ -1,4 +1,4 @@
-function [c_p,c_v,c_a] = generate_polynomial_trajectory(initial_constrains,final_contrains,t0,tf)
+function [c_p,c_v,c_a,c_j] = generate_polynomial_trajectory(initial_constrains,final_contrains,t0,tf)
 x0 = initial_constrains(1);
 v0 = initial_constrains(2);
 a0 = initial_constrains(3);
@@ -21,6 +21,8 @@ c_p = inv(A)*b;
 c_v = polyder(c_p);
 %c_a = [20*c_p(1) 12*c_p(2)  6*c_p(3)  2*c_p(4)]; 
 c_a = polyder(c_v);
+
+c_j = polyder(c_a);
 
 
 end

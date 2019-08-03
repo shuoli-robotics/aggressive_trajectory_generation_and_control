@@ -29,7 +29,7 @@ R_E_B = [cos(theta)*cos(psi) cos(theta)*sin(psi) -sin(theta);...
  R_B_E = R_E_B';
 
  dp = [v_x v_y v_z]';
- dv = [0 0 g]' + R_B_E*[0 0 T]' + R_B_E*D*R_E_B*[vx vy vz]';
+ dv = [0 0 g]' + R_B_E*[0 0 T]' + R_B_E*D*R_E_B*[v_x v_y v_z]';
  dPhi = R_d_angle*[p q r]';
  
  d_states = [dp;dv;dPhi];
