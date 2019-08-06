@@ -1,7 +1,8 @@
-function [T] = feedback_controller_2(p_ref,v_ref,a_ref,states)
+function [omega,T] = feedback_controller_2(p_ref,v_ref,a_ref,states)
 
-k_p = 00.1;
-k_v = 0.1;
+k_p = 2;
+k_v = 1;
+k_att = 5;
 
 g = 9.8;
 z_w = [0 0 1]';
@@ -23,16 +24,18 @@ a_rd = R_E_B'*D*R_E_B*v_ref;
 
 a_des = a_ref + a_fb - a_rd - g*z_w;   % desired thrust vector
 
-z_b_des = a_des / norm(a_des);
+z_b_des = -a_des / norm(a_des);
 y_c = [-sin(psi) cos(psi) 0]';    % todo: maybe use desired psi instead of current psi
 x_b_des = cross(y_c,z_b_des)/ norm(cross(y_c,z_b_des));
 y_b_des = cross(z_b_des,x_b_des);
 T = a_des' * z_b_des;
 
-R = [x_b_des y_b_des z_b_des]';
+R = [x_b_des y_b_des z_b_des];
 euler = rotm2eul(R);
 psi_des = euler(1);
 theta_des = euler(2);
 phi_des = euler(3);
+
+omega = k_att * [phi_des-phi; theta_des-theta; psi_des-psi];
 
 end
