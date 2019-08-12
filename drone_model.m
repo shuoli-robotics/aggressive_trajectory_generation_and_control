@@ -1,6 +1,6 @@
 function [d_states] = drone_model(states,inputs)
 
-D = [-0.3 0 0; 0 -0.7 0; 0 0 -0.6];
+D = [-0.4 0 0; 0 -0.6 0; 0 0 -0.6];
 g = 9.8;
 
 v_x = states(4);

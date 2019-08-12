@@ -28,5 +28,5 @@ v = [polyval(c_v_x,t),polyval(c_v_y,t),polyval(c_v_z,t)]';
           T-(dy-dz)*(z_b'*v)               0                               -(dx-dy)*(x_b'*v);...
           0                              -y_c'*z_b                             norm(cross(y_c,z_b))];
     b = [x_b'*jerk - dx*x_b'*a  -y_b'*jerk + dy*y_b'*a dPsi*x_c'*x_b]'; 
-    angular_rate = inv(A)*b;
+    angular_rate = linsolve(A,b);
 end

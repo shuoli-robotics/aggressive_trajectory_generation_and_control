@@ -1,9 +1,9 @@
 function [deltaOmega,deltaT] = feed_back_controller(pos_ref,psi_ref,states,T)
 global log i
 
-k_p = 0;
-k_v = 0;
-k_att = 0.1;
+k_p = 1;
+k_v = 0.5;
+k_att = 5;
 k_T = 0.3;
 
 phi = states(7);

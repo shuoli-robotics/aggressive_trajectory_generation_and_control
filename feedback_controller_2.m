@@ -1,7 +1,7 @@
 function [omega,T] = feedback_controller_2(p_ref,v_ref,a_ref,states)
 
-k_p = 2;
-k_v = 1;
+k_p = 8;
+k_v = 5;
 k_att = 5;
 
 g = 9.8;
@@ -20,7 +20,7 @@ R_E_B = [cos(theta)*cos(psi) cos(theta)*sin(psi) -sin(theta);...
      cos(phi)*sin(theta)*sin(psi)-sin(phi)*cos(psi) cos(phi)*cos(theta)];
 
 a_fb = K_pos * (p_ref-states(1:3)')+K_vel*(v_ref-states(4:6)');
-a_rd = R_E_B'*D*R_E_B*v_ref;
+a_rd = R_E_B'*D*R_E_B*states(4:6)';
 
 a_des = a_ref + a_fb - a_rd - g*z_w;   % desired thrust vector
 
