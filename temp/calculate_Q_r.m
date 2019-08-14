@@ -1,11 +1,10 @@
-function [Q] = calculate_Q_r(p,r,tau)
+function [Q] = calculate_Q_r(n,r,tau)
 % r is the rth order of the derivative
 % tau is the intergration time
 % n is the number of the coeffcient of the original polynomial
 
-N = length(p)-1;
-p = flip(p);
-Q = zeros(length(p),length(p));
+N = n-1;
+Q = zeros(n,n);
 
 for m = 0:2*(N-r)
     for n = 0:(N-r)
