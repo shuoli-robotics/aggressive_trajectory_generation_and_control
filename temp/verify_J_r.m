@@ -3,13 +3,14 @@ N = length(p)-1;
 p = flip(p);
 J = 0;
 
+
 for m = 0:2*(N-r)
     sum = 0;
     for n = 0:(N-r)
         if (m-n) > (N-r) || n > m
             continue;
         end
-        sum = sum + cumprod(r,n,m)*p(n+r+1)*p(m-n+r+1)*tau^(m+1)/(m+1);
+        sum = sum + p(n+r+1) * cumprod(r,n,m)*tau^(m+1)/(m+1) *p(m-n+r+1);
     end
     J = J + sum;
 end

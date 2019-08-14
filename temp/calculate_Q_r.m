@@ -1,22 +1,27 @@
-function [Q_r] = calculate_Q_r(r,tau,n)
+function [Q] = calculate_Q_r(p,r,tau)
 % r is the rth order of the derivative
 % tau is the intergration time
 % n is the number of the coeffcient of the original polynomial
 
-Q_r = zeros(n,n);
-for i = 1:n
-    for l = 1:n
-        if (i>=r && l >=r)
-            temp = cumprod(i,l,r);
-            Q_r(i,l) = 2*temp*tau^(i+l-2*r+1)/(i+l-2*r+1);
+N = length(p)-1;
+p = flip(p);
+Q = zeros(length(p),length(p));
+
+for m = 0:2*(N-r)
+    for n = 0:(N-r)
+        if (m-n) > (N-r) || n > m
+            continue;
         end
+        Q(n+r+1,m-n+r+1) =  cumprod(r,n,m)*tau^(m+1)/(m+1);
     end
 end
 
+
 end
-function [accum] = cumprod(i,l,r)
+
+function [accum] = cumprod(r,n,m)
     accum = 1;
-    for m = 1 : r
-        accum = accum * (i-m) * (l-m);
+    for j = 0:r-1
+        accum = accum * (n+r-j)*(m-n+r-j);
     end
 end
