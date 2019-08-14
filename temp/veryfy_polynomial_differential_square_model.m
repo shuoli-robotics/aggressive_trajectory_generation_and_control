@@ -4,7 +4,7 @@ close all
 
 dbstop if error
 
-poly_order = 5;
+poly_order = 9;
 p = (-1).^round(rand(poly_order+1,1)) .* round(3* rand(poly_order+1,1));
 
 p_1 = polyder(p); 
