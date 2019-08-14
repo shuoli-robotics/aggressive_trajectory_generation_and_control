@@ -3,20 +3,30 @@ clc
 close all
 
 t0 = 0;
-tf = 10;
-initial_constrains_x = [0 0 0];
-final_contrains_x = [5 0 0];
-initial_constrains_y = [0 0 0];
-final_contrains_y = [2 0 0];
-initial_constrains_z = [-1.5 0 0];
-final_contrains_z = [-2.5 0 0];
-initial_constrains_psi = [0 0 0];
-final_contrains_psi = [0 0 0];
+tf = 5;
+initial_constrains_x = [0 0 0 0];
+final_contrains_x = [5 0 0 0];
+initial_constrains_y = [0 0 0 0];
+final_contrains_y = [2 0 0 0];
+initial_constrains_z = [-1.5 0 0 0];
+final_contrains_z = [-2.5 0 0 0];
+initial_constrains_psi = [0 0 0 0];
+final_contrains_psi = [0 0 0 0];
 
-[c_p_x,c_v_x,c_a_x,c_j_x] = generate_polynomial_trajectory(initial_constrains_x,final_contrains_x,t0,tf);
-[c_p_y,c_v_y,c_a_y,c_j_y] = generate_polynomial_trajectory(initial_constrains_y,final_contrains_y,t0,tf);
-[c_p_z,c_v_z,c_a_z,c_j_z] = generate_polynomial_trajectory(initial_constrains_z,final_contrains_z,t0,tf);
-[c_p_psi,c_v_psi,c_a_psi,~] = generate_polynomial_trajectory(initial_constrains_psi,final_contrains_psi,t0,tf);
+[c_p_x,c_v_x,c_a_x,c_j_x,c_p_y,c_v_y,c_a_y,c_j_y,...
+    c_p_z,c_v_z,c_a_z,c_j_z,c_p_psi,c_v_psi,c_a_psi] = ...
+    generate_polynomial_trajectories(initial_constrains_x,final_contrains_x,...
+    initial_constrains_y,final_contrains_y,...
+    initial_constrains_z,final_contrains_z,...
+    initial_constrains_psi,final_contrains_psi,t0,tf);
+
+% [c_p_x,c_v_x,c_a_x,c_j_x,c_p_y,c_v_y,c_a_y,c_j_y,...
+%     c_p_z,c_v_z,c_a_z,c_j_z,c_p_psi,c_v_psi,c_a_psi] = ...
+%     generate_minimum_snap_trajectories(initial_constrains_x,final_contrains_x,...
+%     initial_constrains_y,final_contrains_y,...
+%     initial_constrains_z,final_contrains_z,...
+%     initial_constrains_psi,final_contrains_psi,t0,tf);
+
 
 time_step = 1/500;
 states = zeros((tf-t0)/time_step,9);
@@ -49,13 +59,7 @@ for i = 1:(tf-t0)/time_step-1
         a_y_ref(i) = polyval(c_a_y,t(i));
         a_z_ref(i) = polyval(c_a_z,t(i));
     end
-%     if t(i) == 5
-%        temp = 1; 
-%     end
-%     [angular_rate_ff,T_ff] = feed_forward_controller(c_v_x,c_v_y,c_v_z,...
-%                                                  c_a_x,c_a_y,c_a_z,...   
-%                                                  c_j_x,c_j_y,c_j_z,...
-%                                                  c_p_psi,c_v_psi,t(i));
+
     [angular_rate_ff,T_ff] = feed_forward_controller(c_v_x,c_v_y,c_v_z,...
                                                  c_a_x,c_a_y,c_a_z,...   
                                                  c_j_x,c_j_y,c_j_z,...

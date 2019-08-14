@@ -1,4 +1,4 @@
-function [x] = generate_optimal_trajectory(N,t0,tf,x0,xf)
+function [c_p,c_v,c_a,c_j] = generate_optimal_trajectory(N,t0,tf,x0,xf)
 
 Q_R = calculate_Q_r(N+1,4,tf-t0);
 n = N+1;
@@ -18,11 +18,14 @@ A = []; b = [];
 beq = [x0';xf'];
 
 p = quadprog(Q_R,f,A,b,Aeq,beq);
-p = flip(p);
+c_p = flip(p);
+c_v = polyder(c_p);
+c_a = polyder(c_v);
+c_j = polyder(c_a);
 
-t = t0:0.01:tf;
-x = polyval(p,t);
-plot(t,x);
+% t = t0:0.01:tf;
+% x = polyval(p,t);
+% plot(t,x);
 
 end
 
