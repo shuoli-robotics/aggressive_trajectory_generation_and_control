@@ -2,7 +2,8 @@ function [c_p,c_v,c_a,c_j] = generate_optimal_trajectory(N,t0,tf,x0,xf)
 
 Q_R = calculate_Q_r(N+1,4,tf-t0);
 n = N+1;
-f = zeros(1,n);
+%f = zeros(1,n);
+f = [];
 
 A0 = zeros(4,n);
 Af = zeros(4,n);
