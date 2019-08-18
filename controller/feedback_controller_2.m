@@ -1,8 +1,12 @@
-function [omega,T] = feedback_controller_2(p_ref,v_ref,a_ref,states)
+function [omega,T] = feedback_controller_2(ref,states)
+
+p_ref = ref(1:3)';
+v_ref = ref(4:6)';
+a_ref = ref(7:9)';
 
 k_p = 8;
 k_v = 5;
-k_att = 5;
+k_att = 10;
 
 g = 9.8;
 z_w = [0 0 1]';

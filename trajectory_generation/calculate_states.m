@@ -1,4 +1,4 @@
-function [euler,angular_rate,T] = calculate_states(c_v_x,c_v_y,c_v_z,...
+function [inputs] = calculate_states(c_v_x,c_v_y,c_v_z,...
                                                  c_a_x,c_a_y,c_a_z,...   
                                                  c_j_x,c_j_y,c_j_z,...
                                                  c_p_psi,c_v_psi,t)
@@ -25,7 +25,7 @@ v = [polyval(c_v_x,t),polyval(c_v_y,t),polyval(c_v_z,t)]';
     T = z_b' * (a-g*z_w-dz*v);
     
     R = [x_b y_b z_b];
-    euler = rotm2eul(R);
+%     euler = rotm2eul(R);
 %     psi = euler(1);
 %     theta = euler(2);
 %     phi = euler(3);
@@ -35,4 +35,5 @@ v = [polyval(c_v_x,t),polyval(c_v_y,t),polyval(c_v_z,t)]';
           0                              -y_c'*z_b                             norm(cross(y_c,z_b))];
     b = [x_b'*jerk - dx*x_b'*a  -y_b'*jerk + dy*y_b'*a dPsi*x_c'*x_b]'; 
     angular_rate = linsolve(A,b);
+    inputs = [angular_rate' T];
 end
