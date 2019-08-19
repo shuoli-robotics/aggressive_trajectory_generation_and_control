@@ -1,0 +1,5 @@
+/usr/local/lib/libesa_nn.so
+/usr/local/include/esa_nn/esa_simulation.h
+/usr/local/include/esa_nn/nn.h
+/usr/local/include/esa_nn/nn_params.h
+/usr/local/include/esa_nn/pd_gains.h

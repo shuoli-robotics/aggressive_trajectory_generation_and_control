@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/shuo/matlabProject/readBebopLog/esa_simulation/power_bebop_drag_h05_n0100/nn.c
+math.h
+-
+string.h
+-
+nn.h
+/home/shuo/matlabProject/readBebopLog/esa_simulation/power_bebop_drag_h05_n0100/nn.h
+nn_params.h
+/home/shuo/matlabProject/readBebopLog/esa_simulation/power_bebop_drag_h05_n0100/nn_params.h
+pd_gains.h
+/home/shuo/matlabProject/readBebopLog/esa_simulation/power_bebop_drag_h05_n0100/pd_gains.h
+
+/home/shuo/matlabProject/readBebopLog/esa_simulation/power_bebop_drag_h05_n0100/nn.h
+
+/home/shuo/matlabProject/readBebopLog/esa_simulation/power_bebop_drag_h05_n0100/nn_params.c
+nn_params.h
+/home/shuo/matlabProject/readBebopLog/esa_simulation/power_bebop_drag_h05_n0100/nn_params.h
+
+/home/shuo/matlabProject/readBebopLog/esa_simulation/power_bebop_drag_h05_n0100/nn_params.h
+
+/home/shuo/matlabProject/readBebopLog/esa_simulation/power_bebop_drag_h05_n0100/pd_gains.h
+
