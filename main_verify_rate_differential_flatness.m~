@@ -2,22 +2,12 @@ clear
 clc
 close all
 dbstop if error
-global ref states t inputs kp states_nn inputs_nn
-
-kp = 50;
-
-addpath("/usr/local/lib/");
-addpath("/usr/local/include/esa_nn");
-if not(libisloaded('libesa_nn'))
-    loadlibrary('libesa_nn','esa_simulation.h','addheader','nn.h','addheader','nn_params.h','addheader','pd_gains.h')
-end
-
- libfunctions('libesa_nn','-full')
+global ref states t inputs
 
 t0 = 0;
 tf = 3;
 initial_constrains_x = [0 0 0 0];
-final_contrains_x = [12 0 0 0];
+final_contrains_x = [5 0 0 0];
 initial_constrains_y = [0 0 0 0];
 final_contrains_y = [0 0 0 0];
 initial_constrains_z = [-1.5 0 0 0];
@@ -86,24 +76,23 @@ for i = 1:(tf-t0)/time_step-1
     ref(i+1,9) = polyval(c_a_z,t(i+1));
     
     %% nn simulation
-    if i ~= 1
-        currentStates = [final_contrains_x(1)-states_nn(i-1,1), -states_nn(i-1,3),...
-            -states_nn(i-1,2)+final_contrains_z(1), -states_nn(i-1,4), -states_nn(i-1,5),...
-            -states_nn(i-1,6)];
-        control_temp = [0 0];
-        [~,control] = calllib('libesa_nn','nn',currentStates,control_temp);
-        F_min = 1.76;
-        F_max = 2.35;
-        FL = F_min + control(1)*(F_max - F_min);
-        FR = F_min + control(2)*(F_max - F_min);
-        theta = states_nn(i-1,5);
-        a_z_b_cmd = -(FL+FR)/0.389;
-        I_xx = 0.001242;
-        L = 0.08;
-        dq_cmd = (FL-FR)/I_xx*L;
-        inputs_nn(i,:) = [FL FR];
-        states_nn(i,:) = states_nn(i-1,:) + time_step * drone_model_2d(states_nn(i-1,:),[a_z_b_cmd dq_cmd]);
-    end
+    currentStates = [final_contrains_x-states(i-1,1), -states(i-1,3),...
+        -states(i-1,2)+final_contrains_z(1) -states(i-1,4) -states(i-1,5)...
+        -states(i-1,6)];
+    control_temp = [0 0];
+    [~,control] = calllib('libesa_nn','nn',currentStates,control_temp);
+    F_min = 1.76;
+    F_max = 2.35;
+    FL = F_min + control(1)*(F_max - F_min);
+    FR = F_min + control(2)*(F_max - F_min);
+    theta = states(i-1,5);
+    a_z_b_cmd = -(FL+FR)/0.389;
+    %a_z_b_cmd = -9.8;
+    I_xx = 0.001242;
+    L = 0.08;
+    dq_cmd = (FL-FR)/I_xx*L;
+    inputs(i-1,:) = [a_z_b_cmd dq_cmd];
+    states(i,:) = states(i-1,:) + simStep * drone_model(states(i-1,:),[a_z_b_cmd dq_cmd]);  
 end
 
 

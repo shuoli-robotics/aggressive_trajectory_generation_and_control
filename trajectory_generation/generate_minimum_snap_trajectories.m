@@ -9,7 +9,7 @@ N = 7;
 time_step = 0.01;
 feasible = 1;
 t0 = 0;
-tf = 20;
+tf = 10;
 
 p = 1;
 while(feasible)
@@ -54,7 +54,7 @@ function F = calculate_force(drate,T)
 end
 
 function [flag_feasible] = check_feasible(F)
-    if max(F) > 2.1 || min(F) < 1.76
+    if max(F) > 2.35 || min(F) < 1.76
         flag_feasible = 0;
     else
         flag_feasible = 1;
