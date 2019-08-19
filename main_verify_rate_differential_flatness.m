@@ -4,7 +4,7 @@ close all
 dbstop if error
 global ref states t inputs kp states_nn inputs_nn
 
-kp = 50;
+kp = 20;
 
 addpath("/usr/local/lib/");
 addpath("/usr/local/include/esa_nn");
@@ -17,10 +17,10 @@ end
 t0 = 0;
 tf = 3;
 initial_constrains_x = [0 0 0 0];
-final_contrains_x = [12 0 0 0];
+final_contrains_x = [5 0 0 0];
 initial_constrains_y = [0 0 0 0];
 final_contrains_y = [0 0 0 0];
-initial_constrains_z = [-1.5 0 0 0];
+initial_constrains_z = [-2.5 0 0 0];
 final_contrains_z = [-2.5 0 0 0];
 initial_constrains_psi = [0 0 0 0];
 final_contrains_psi = [0 0 0 0];
