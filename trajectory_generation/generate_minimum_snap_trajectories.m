@@ -12,21 +12,21 @@ t0 = 0;
 tf = 10;
 
 p = 1;
-while(feasible)
-    [c_p_x,c_v_x,c_a_x,c_j_x] = generate_optimal_trajectory(N,t0,tf,initial_constrains_x,final_contrains_x);
-    [c_p_y,c_v_y,c_a_y,c_j_y] = generate_optimal_trajectory(N,t0,tf,initial_constrains_y,final_contrains_y);
-    [c_p_z,c_v_z,c_a_z,c_j_z] = generate_optimal_trajectory(N,t0,tf,initial_constrains_z,final_contrains_z);
-    [c_p_psi,c_v_psi,c_a_psi,c_j_psi] = generate_optimal_trajectory(N,t0,tf,initial_constrains_psi,final_contrains_psi);
+while(1)
+    [c_p_x_temp,c_v_x_temp,c_a_x_temp,c_j_x_temp] = generate_optimal_trajectory(N,t0,tf,initial_constrains_x,final_contrains_x);
+    [c_p_y_temp,c_v_y_temp,c_a_y_temp,c_j_y_temp] = generate_optimal_trajectory(N,t0,tf,initial_constrains_y,final_contrains_y);
+    [c_p_z_temp,c_v_z_temp,c_a_z_temp,c_j_z_temp] = generate_optimal_trajectory(N,t0,tf,initial_constrains_z,final_contrains_z);
+    [c_p_psi_temp,c_v_psi_temp,c_a_psi_temp,c_j_psi_temp] = generate_optimal_trajectory(N,t0,tf,initial_constrains_psi,final_contrains_psi);
  
     inputs = zeros(round(tf/time_step),4);
     thrust = zeros(round(tf/time_step),2);
     t = zeros(round(tf/time_step),1);
     for i = 1:size(inputs,1)
         t(i) = i * time_step;
-        inputs(i,:) = calculate_states(c_v_x,c_v_y,c_v_z,...
-                                                 c_a_x,c_a_y,c_a_z,...   
-                                                 c_j_x,c_j_y,c_j_z,...
-                                                 c_p_psi,c_v_psi,t(i));
+        inputs(i,:) = calculate_states(c_v_x_temp,c_v_y_temp,c_v_z_temp,...
+                                                 c_a_x_temp,c_a_y_temp,c_a_z_temp,...   
+                                                 c_j_x_temp,c_j_y_temp,c_j_z_temp,...
+                                                 c_p_psi_temp,c_v_psi_temp,t(i));
         if i ~= 1
             drate =  (inputs(i,:) -  inputs(i-1,:))/time_step;
             thrust(i-1,:) = calculate_force(drate,inputs(i-1,4));
@@ -34,6 +34,13 @@ while(feasible)
             feasible = feasible & flag_feasible;
         end
     end
+    if ~feasible
+        break;
+    end
+    c_p_x = c_p_x_temp; c_v_x = c_v_x_temp; c_a_x = c_a_x_temp; c_j_x = c_j_x_temp;
+    c_p_y = c_p_y_temp; c_v_y = c_v_y_temp; c_a_y = c_a_y_temp; c_j_y = c_j_y_temp;
+    c_p_z = c_p_z_temp; c_v_z = c_v_z_temp; c_a_z = c_a_z_temp; c_j_z = c_j_z_temp;
+    c_p_psi = c_p_psi_temp; c_v_psi = c_v_psi_temp; c_a_psi = c_a_psi_temp; c_j_psi = c_j_psi_temp;
     p = p+1;
     tf = tf - 0.1;
 end

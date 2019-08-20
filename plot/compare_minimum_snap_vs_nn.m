@@ -21,7 +21,7 @@ grid on
 plot(t,ref(:,1));
 plot(t,states(:,1));
 plot(t(1:end-1),states_nn(:,1));
-legend('ref','minimum_snap','nn')
+legend('ref','snap','nn')
 ylabel('x[m]')
 subplot(2,1,2)
 hold on
@@ -45,7 +45,7 @@ hold on
 grid on
 plot(t(1:end-2),thrust(:,2));
 plot(t(1:end-1),inputs_nn(:,2));
-legend('minimum_snap','nn')
+legend('snap','nn')
 ylabel('F2[N]')
 xlabel('time[s]')
 

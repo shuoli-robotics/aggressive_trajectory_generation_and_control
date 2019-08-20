@@ -28,8 +28,6 @@ thresh = 0.1;
 
 for m = 1:length(x_target)
     for n = 1:length(z_target)
-        m
-        n
         initial_constrains_x = [0 0 0 0];
         final_contrains_x = [x_target(m) 0 0 0];
         initial_constrains_y = [0 0 0 0];
