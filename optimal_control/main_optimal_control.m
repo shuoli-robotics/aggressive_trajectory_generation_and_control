@@ -54,6 +54,13 @@ Aeq = [];
 beq = [];
 options = optimoptions(@fminunc,'Display','iter');
 %x = fmincon(@optimal_object,variables,A,b,Aeq,beq,lb,ub,@mycon,options);
-x = ga(@optimal_object,length(variables),A,b,Aeq,beq,lb,ub,@mycon,options);
+%x = ga(@optimal_object,length(variables),A,b,Aeq,beq,lb,ub,@mycon,options);
+
+opts = optimoptions(@fmincon,'Algorithm','sqp');
+problem = createOptimProblem('fmincon','objective',@optimal_object,'x0',variables,'lb',lb,'ub',ub,'nonlcon',@mycon,'options',opts);
+gs = GlobalSearch;
+%ms = MultiStart;
+[x,f] = run(gs,problem);
+
 plot_variables(x,N);
  temp = 1;   
