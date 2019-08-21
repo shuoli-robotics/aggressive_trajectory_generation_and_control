@@ -4,7 +4,7 @@ close all
 
 dbstop if error
 
-global N
+global N initial_states final_states
 
 %% initialization of optimal control problem
 
@@ -29,19 +29,31 @@ variables = generate_a_feasible_trajectory(initial_constrains_x,final_contrains_
 %% prepare for fmincon
 ub = zeros(length(variables),1);
 lb = zeros(length(variables),1);
+p = 1;
 for i = 1:length(variables)
-    if rem(i,5) == 0
+    if rem(p,5) == 0
         ub(i) = 45/180*pi;
         lb(i) = -45/180*pi;
-    elseif rem(i,7) == 0 || rem(i,8) == 0
-        ub(i) = 2.35;
-        lb(i) = 1.76;
+    elseif rem(p,7) == 0 || rem(p,8) == 0
+        ub(i) = -1.76;
+        lb(i) = -2.35;
+    else
+        ub(i) = 100;
+        lb(i) = -100;
+    end
+    p = p + 1;
+    if p > 8
+        p = 1;
     end
 end
+initial_states = [initial_constrains_x(1) initial_constrains_z(1) initial_constrains_x(2) initial_constrains_z(2) 0 0]';
+final_states = [final_contrains_x(1) final_contrains_z(1) final_contrains_x(2) final_contrains_z(2) 0 0]';
 A = [];
 b = [];
 Aeq = [];
 beq = [];
-x = fmincon(@optimal_object,variables,A,b,Aeq,beq,lb,ub,@mycon);
-
+options = optimoptions(@fminunc,'Display','iter');
+%x = fmincon(@optimal_object,variables,A,b,Aeq,beq,lb,ub,@mycon,options);
+x = ga(@optimal_object,length(variables),A,b,Aeq,beq,lb,ub,@mycon,options);
+plot_variables(x,N);
  temp = 1;   

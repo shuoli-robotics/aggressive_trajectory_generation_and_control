@@ -1,22 +1,20 @@
 function [c,ceq] = mycon(x)
 global N initial_states final_states
 
-for i = 2:N
+for i = 1:N
     %% initial constraints
     if i == 1
-        ceq(1:6) = x(1:6) - initial_states;
-    end
-    if i == N
-        temp = 1;
+        ceq(1:6) = x(1:6)' - initial_states;
+        continue;
     end
     %% x_i - x_(i-1) - deltaT * drone_model(x(i-1),u(i-1)) = 0
-    ceq(i*6+1 : i*6+6) = ...
+    ceq((i-1)*6+1 : (i-1)*6+6) = ...
         x(8*(i-1)+1:8*(i-1)+6)- x(8*(i-2)+1:8*(i-2)+6) - ...
         x(end)*drone_model(x(8*(i-2)+1:8*(i-2)+6),x(8*(i-2)+7:8*(i-2)+8))';
 end
 
 %% final constrants
-ceq = [ceq'; x((N-1)*8+1:(N-1)*8+6) - final_states];
+ceq = [ceq'; x((N-1)*8+1:(N-1)*8+6)' - final_states];
 c = [];
 
 end

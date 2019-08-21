@@ -4,7 +4,7 @@ function [variables] = generate_a_feasible_trajectory(initial_constrains_x,final
 global N
 
 t0 = 0;
-tf = 10;
+tf = 5;
 variables = zeros(1,8*N+1);
 
 [c_p_x,c_v_x,c_a_x,c_j_x,c_p_y,c_v_y,c_a_y,c_j_y,...
@@ -28,6 +28,7 @@ for i = 1:N
         variables((i-2)*8+7:(i-2)*8+8) = calculate_force(drate,inputs(i-1,4));
     end
 end
+variables((N-1)*8+7:(N-1)*8+8) = variables((N-2)*8+7:(N-2)*8+8);
 variables(end) = time_step;
 
 %plot_variables(variables,N);
