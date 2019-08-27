@@ -20,7 +20,7 @@ hold on
 grid on
 plot(t,ref(:,1));
 plot(t,states(:,1));
-plot(t(1:end-1),states_nn(:,1));
+plot(t(1:end),states_nn(:,1));
 legend('ref','snap','nn')
 ylabel('x[m]')
 subplot(2,1,2)
@@ -28,7 +28,7 @@ hold on
 grid on
 plot(t,ref(:,3));
 plot(t,states(:,3));
-plot(t(1:end-1),states_nn(:,2));
+plot(t(1:end),states_nn(:,2));
 ylabel('z[m]')
 xlabel('time[s]')
 
@@ -36,15 +36,15 @@ figure(fig_num+1)
 subplot(2,1,1)
 hold on
 grid on
-plot(t(1:end-2),thrust(:,1));
-plot(t(1:end-1),inputs_nn(:,1));
+plot(t(1:end-1),thrust(:,1));
+plot(t(1:end),inputs_nn(:,1));
 legend('minimum_snap','nn')
 ylabel('F1[N]')
 subplot(2,1,2)
 hold on
 grid on
-plot(t(1:end-2),thrust(:,2));
-plot(t(1:end-1),inputs_nn(:,2));
+plot(t(1:end-1),thrust(:,2));
+plot(t(1:end),inputs_nn(:,2));
 legend('snap','nn')
 ylabel('F2[N]')
 xlabel('time[s]')

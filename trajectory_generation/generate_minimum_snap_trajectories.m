@@ -9,7 +9,7 @@ N = 7;
 time_step = 0.01;
 feasible = 1;
 t0 = 0;
-tf = 10;
+tf = 5;
 
 p = 1;
 while(1)
@@ -41,6 +41,20 @@ while(1)
     c_p_y = c_p_y_temp; c_v_y = c_v_y_temp; c_a_y = c_a_y_temp; c_j_y = c_j_y_temp;
     c_p_z = c_p_z_temp; c_v_z = c_v_z_temp; c_a_z = c_a_z_temp; c_j_z = c_j_z_temp;
     c_p_psi = c_p_psi_temp; c_v_psi = c_v_psi_temp; c_a_psi = c_a_psi_temp; c_j_psi = c_j_psi_temp;
+    figure(201)
+    tt = 0:0.05:tf;
+    xx = zeros(length(tt),1);
+    zz = zeros(length(tt),1);
+    for i = 1:length(tt)
+       xx(i) = polyval(c_p_x,tt(i)); 
+       zz(i) = polyval(c_p_z,tt(i)); 
+    end
+    subplot(2,1,1)
+    hold on
+    plot(tt,xx);
+    subplot(2,1,2)
+    hold on
+    plot(tt,zz);
     p = p+1;
     tf = tf - 0.1;
 end

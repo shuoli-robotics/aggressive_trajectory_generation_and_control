@@ -1,0 +1,3 @@
+[submodule "readBebopLog"]
+	path = readBebopLog
+	url = https://github.com/ls90911/readBebopLog.git
