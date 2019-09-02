@@ -26,8 +26,8 @@ faster_rate = zeros(length(x_target),length(z_target));
 thresh = 0.1;
 
 
-for m = 11:length(x_target)
-    for n = 10:length(z_target)
+for m = 1:length(x_target)
+    for n = 1:length(z_target)
         initial_constrains_x = [0 0 0 0];
         final_contrains_x = [x_target(m) 0 0 0];
         initial_constrains_y = [0 0 0 0];
