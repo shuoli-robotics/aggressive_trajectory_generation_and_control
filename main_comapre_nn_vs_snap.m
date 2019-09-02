@@ -23,7 +23,7 @@ t0 = 0;
 x_target = [1:0.5:10];
 z_target = [0:-0.5:-5];
 faster_rate = zeros(length(x_target),length(z_target));
-thresh = 0.1;
+thresh = 0.05;
 
 
 for m = 1:length(x_target)
@@ -58,14 +58,12 @@ for m = 1:length(x_target)
         states(1,:) = [initial_constrains_x(1) initial_constrains_y(1) initial_constrains_z(1)...
             initial_constrains_x(2) initial_constrains_y(2) initial_constrains_z(2) 0 0 0];
         
-        states_nn = zeros(floor(tf-t0)/time_step,7);
-        inputs_nn = zeros(floor(tf-t0)/time_step,2);
         states_nn(1,:) = [initial_constrains_x(1) initial_constrains_z(1) initial_constrains_x(2) initial_constrains_z(2) 0 0 0];
         
-        for i = 1:(tf-t0)/time_step-1
+        for i = 1:(tf-t0)/time_step
             %% minimum snap
+            t(i) = t0 + (i-1) * time_step;
             if i == 1
-                t(i) = t0 + i * time_step;
                 ref(i,1) = polyval(c_p_x,t(i));
                 ref(i,2) = polyval(c_p_y,t(i));
                 ref(i,3) = polyval(c_p_z,t(i));
@@ -76,60 +74,69 @@ for m = 1:length(x_target)
                 ref(i,7) = polyval(c_a_x,t(i));
                 ref(i,8) = polyval(c_a_y,t(i));
                 ref(i,9) = polyval(c_a_z,t(i));
+                continue;
             end
             
             [angular_rate_ff,T_ff] = feed_forward_controller(c_v_x,c_v_y,c_v_z,...
                 c_a_x,c_a_y,c_a_z,...
                 c_j_x,c_j_y,c_j_z,...
-                c_p_psi,c_v_psi,t(i));
+                c_p_psi,c_v_psi,t(i-1));
             
-            [angular_rate_fb,T] = feedback_controller_2(ref(i,:),states(i,:));
+            [angular_rate_fb,T] = feedback_controller_2(ref(i-1,:),states(i-1,:));
             
             angular_rate = angular_rate_ff + angular_rate_fb;
-            inputs(i,:) = [angular_rate' T];
-            states(i+1,:) =  states(i,:) + time_step * drone_model(states(i,:),inputs(i,:))';
-            if norm([states(i+1,1) states(i+1,3)] - [final_contrains_x(1) final_contrains_z(1)]) < thresh && flag_snap
+            inputs(i-1,:) = [angular_rate' T];
+            states(i,:) =  states(i-1,:) + time_step * drone_model(states(i-1,:),inputs(i-1,:))';
+            
+            if norm([states(i,1) states(i,3)] - [final_contrains_x(1) final_contrains_z(1)]) < thresh && flag_snap
                 time_snap = t(i);
                 flag_snap = 0;     
             end
-
             
-            t(i+1) = t0 + (i+1) * time_step;
-            ref(i+1,1) = polyval(c_p_x,t(i+1));
-            ref(i+1,2) = polyval(c_p_y,t(i+1));
-            ref(i+1,3) = polyval(c_p_z,t(i+1));
-            ref(i+1,10) = polyval(c_p_psi,t(i+1));
-            ref(i+1,4) = polyval(c_v_x,t(i+1));
-            ref(i+1,5) = polyval(c_v_y,t(i+1));
-            ref(i+1,6) = polyval(c_v_z,t(i+1));
-            ref(i+1,7) = polyval(c_a_x,t(i+1));
-            ref(i+1,8) = polyval(c_a_y,t(i+1));
-            ref(i+1,9) = polyval(c_a_z,t(i+1));
+            ref(i,1) = polyval(c_p_x,t(i));
+            ref(i,2) = polyval(c_p_y,t(i));
+            ref(i,3) = polyval(c_p_z,t(i));
+            ref(i,10) = polyval(c_p_psi,t(i));
+            ref(i,4) = polyval(c_v_x,t(i));
+            ref(i,5) = polyval(c_v_y,t(i));
+            ref(i,6) = polyval(c_v_z,t(i));
+            ref(i,7) = polyval(c_a_x,t(i));
+            ref(i,8) = polyval(c_a_y,t(i));
+            ref(i,9) = polyval(c_a_z,t(i));
             
-            %% nn simulation
-            if i ~= 1
-                currentStates = [final_contrains_x(1)-states_nn(i-1,1), -states_nn(i-1,3),...
-                    -states_nn(i-1,2)+final_contrains_z(1), -states_nn(i-1,4), -states_nn(i-1,5),...
-                    -states_nn(i-1,6)];
+        end
+        
+        p = 1;
+        states_nn = [initial_constrains_x(1) initial_constrains_z(1) initial_constrains_x(2) initial_constrains_z(2) 0 0 0];
+        inputs_nn = [0 0];
+        t_nn = [0];
+        while(1)
+            if p ~= 1
+                t_nn(p) = (p-1)* time_step;
+                currentStates = [final_contrains_x(1)-states_nn(p-1,1), -states_nn(p-1,3),...
+                    -states_nn(p-1,2)+final_contrains_z(1), -states_nn(p-1,4), -states_nn(p-1,5),...
+                    -states_nn(p-1,6)];
                 control_temp = [0 0];
                 [~,control] = calllib('libesa_nn','nn',currentStates,control_temp);
                 F_min = 1.76;
                 F_max = 2.35;
                 FL = F_min + control(1)*(F_max - F_min);
                 FR = F_min + control(2)*(F_max - F_min);
-                theta = states_nn(i-1,5);
+                theta = states_nn(p-1,5);
                 a_z_b_cmd = -(FL+FR)/0.389;
                 I_xx = 0.001242;
                 L = 0.08;
                 dq_cmd = (FL-FR)/I_xx*L;
-                inputs_nn(i,:) = [FL FR];
-                states_nn(i,:) = states_nn(i-1,:) + time_step * drone_model_2d(states_nn(i-1,:),[a_z_b_cmd dq_cmd]);
-                if norm([states_nn(i,1) states_nn(i,2)] - [final_contrains_x(1) final_contrains_z(1)]) < thresh && flag_nn
-                    time_nn = t(i);
-                    flag_nn = 0;
+                inputs_nn(p,:) = [FL FR];
+                states_nn(p,:) = states_nn(p-1,:) + time_step * drone_model_2d(states_nn(p-1,:),[a_z_b_cmd dq_cmd]);
+                if norm([currentStates(1) currentStates(2)])<thresh
+                    time_nn =  t_nn(p);
+                    break;
                 end
-            end   
+            end
+            p = p + 1;
         end
+
        faster_rate(m,n) = (time_snap-time_nn)/time_snap; 
     end
 end

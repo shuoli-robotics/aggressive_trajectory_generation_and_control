@@ -9,7 +9,7 @@ N = 7;
 time_step = 0.01;
 feasible = 1;
 t0 = 0;
-tf = 5;
+tf = 10;
 
 p = 1;
 while(1)
