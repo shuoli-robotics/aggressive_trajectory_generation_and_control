@@ -6,7 +6,7 @@ function [c_p_x,c_v_x,c_a_x,c_j_x,c_p_y,c_v_y,c_a_y,c_j_y,...
     initial_constrains_psi,final_contrains_psi)
 
 N = 7;
-time_step = 0.01;
+time_step = 0.005;
 feasible = 1;
 t0 = 0;
 tf = 10;

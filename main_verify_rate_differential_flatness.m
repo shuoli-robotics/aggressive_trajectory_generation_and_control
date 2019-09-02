@@ -17,11 +17,11 @@ end
 
 t0 = 0;
 initial_constrains_x = [0 0 0 0];
-final_contrains_x = [4.5 0 0 0];
+final_contrains_x = [5 0 0 0];
 initial_constrains_y = [0 0 0 0];
 final_contrains_y = [0 0 0 0];
 initial_constrains_z = [-2.5 0 0 0];
-final_contrains_z = [-3.5 0 0 0];
+final_contrains_z = [-2 0 0 0];
 initial_constrains_psi = [0 0 0 0];
 final_contrains_psi = [0 0 0 0];
 
