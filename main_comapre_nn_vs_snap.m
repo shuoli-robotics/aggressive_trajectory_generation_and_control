@@ -90,7 +90,10 @@ for m = 1:length(x_target)
             
             if norm([states(i,1) states(i,3)] - [final_contrains_x(1) final_contrains_z(1)]) < thresh && flag_snap
                 time_snap = t(i);
-                flag_snap = 0;     
+                flag_snap = 0;  
+%                 figure(555)
+%                 hold on
+%                 plot(t(1:i),states(1:i,3));
             end
             
             ref(i,1) = polyval(c_p_x,t(i));
@@ -129,8 +132,11 @@ for m = 1:length(x_target)
                 dq_cmd = (FL-FR)/I_xx*L;
                 inputs_nn(p,:) = [FL FR];
                 states_nn(p,:) = states_nn(p-1,:) + time_step * drone_model_2d(states_nn(p-1,:),[a_z_b_cmd dq_cmd]);
-                if norm([currentStates(1) currentStates(2)])<thresh
+                if norm([states_nn(p,1) states_nn(p,2)]-[x_target(m) z_target(n)])<thresh
                     time_nn =  t_nn(p);
+%                     figure(555)
+%                     hold on
+%                     plot(t_nn,states_nn(:,2));
                     break;
                 end
             end
