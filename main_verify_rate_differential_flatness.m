@@ -17,11 +17,11 @@ end
 
 t0 = 0;
 initial_constrains_x = [0 0 0 0];
-final_contrains_x = [1 0 0 0];
+final_contrains_x = [6 0 0 0];
 initial_constrains_y = [0 0 0 0];
 final_contrains_y = [0 0 0 0];
 initial_constrains_z = [-2.5 0 0 0];
-final_contrains_z = [-0 0 0 0];
+final_contrains_z = [-4.5 0 0 0];
 initial_constrains_psi = [0 0 0 0];
 final_contrains_psi = [0 0 0 0];
 
@@ -113,7 +113,7 @@ while(1)
         dq_cmd = (FL-FR)/I_xx*L;
         inputs_nn(p,:) = [FL FR];
         states_nn(p,:) = states_nn(p-1,:) + time_step * drone_model_2d(states_nn(p-1,:),[a_z_b_cmd dq_cmd]); 
-        if norm([currentStates(1) currentStates(2)])<0.05
+        if norm([currentStates(1) currentStates(2)])<0.1
             break;
         end
     end    
