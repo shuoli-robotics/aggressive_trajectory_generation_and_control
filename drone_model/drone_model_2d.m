@@ -13,8 +13,8 @@ dq_nn = inputs(2);
 
 dot_x = vx;
 dot_z = vz;
-dot_vx = a_z_b * sin(theta)-0.4*vx;
-dot_vz = a_z_b * cos(theta)+9.8 -0.6*vz;
+dot_vx = a_z_b * sin(theta)-0.5*vx;
+dot_vz = a_z_b * cos(theta)+9.8 -0.5*vz;
 dot_Theta = q;
 dot_q = dq;
 dot_dq = (dq_nn - dq) * kp;

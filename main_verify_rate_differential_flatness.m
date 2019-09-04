@@ -3,9 +3,10 @@ clc
 close all
 clear global
 dbstop if error
-global ref states t inputs kp states_nn inputs_nn t_nn
+global ref states t inputs kp states_nn inputs_nn t_nn final_contrains_x final_contrains_z
 
 kp = 20;
+thresh = 0.01;
 
 addpath("/usr/local/lib/");
 addpath("/usr/local/include/esa_nn");
@@ -21,7 +22,7 @@ final_contrains_x = [5 0 0 0];
 initial_constrains_y = [0 0 0 0];
 final_contrains_y = [0 0 0 0];
 initial_constrains_z = [-2.5 0 0 0];
-final_contrains_z = [-2 0 0 0];
+final_contrains_z = [-2.0 0 0 0];
 initial_constrains_psi = [0 0 0 0];
 final_contrains_psi = [0 0 0 0];
 
@@ -113,7 +114,7 @@ while(1)
         dq_cmd = (FL-FR)/I_xx*L;
         inputs_nn(p,:) = [FL FR];
         states_nn(p,:) = states_nn(p-1,:) + time_step * drone_model_2d(states_nn(p-1,:),[a_z_b_cmd dq_cmd]); 
-        if norm([currentStates(1) currentStates(2)])<0.1
+        if norm([states_nn(p,1) states_nn(p,2)]-[final_contrains_x(1) final_contrains_z(1)])<thresh
             break;
         end
     end    
