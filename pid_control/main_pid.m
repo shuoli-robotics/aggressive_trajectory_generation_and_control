@@ -1,4 +1,4 @@
-function main_pid(x0,z0,x_f,z_f,tf)
+function [states,inputs,x_cmd,z_cmd,time] = main_pid(x0,z0,x_f,z_f,tf)
 
 simStep = 1/500;
 states = zeros(tf/simStep,6);
@@ -47,61 +47,64 @@ for i = 1:length(time)-1
 end
 time(end) = tf;
 inputs(end,:) = inputs(end-1,:);
+x_cmd(end) = x_f;
+z_cmd(end) = z_f;
 
-figure(1)
-hold on
-subplot(2,1,1)
-plot(time,x_cmd);
-plot(time,states(:,1));
-legend('cmd','trajectory')
-ylabel('x[m]')
-subplot(2,1,2)
-plot(time,z_cmd);
-plot(time,states(:,2));
-ylabel('z[m]')
-xlabel('time[s]');
-
-figure(2)
-hold on
-subplot(2,1,1)
-plot(time,vx_cmd);
-plot(time,states(:,3));
-legend('cmd','trajectory')
-ylabel('v_x[m/s]')
-subplot(2,1,2)
-plot(time,vz_cmd);
-plot(time,states(:,4));
-ylabel('v_z[m/s]')
-xlabel('time[s]');
-
-figure(3)
-hold on
-subplot(2,1,1)
-plot(time,theta_cmd);
-plot(time,states(:,5));
-legend('cmd','trajectory')
-ylabel('theta[rad]')
-subplot(2,1,2)
-plot(time,vx_cmd);
-plot(time,states(:,6));
-ylabel('q[rad/s]')
-xlabel('time[s]');
-
-figure(4)
-hold on
-subplot(2,1,1)
-plot(time,T_cmd);
-ylabel('thrust cmd [N]')
-subplot(2,1,2)
-plot(time,M_cmd);
-ylabel('M_cmd');
-xlabel('time[s]');
-
-
-
-figure(5)
-hold on
-plot(time,inputs(:,1));
-plot(time,inputs(:,2));
+% figure(1)
+% hold on
+% subplot(2,1,1)
+% plot(time,x_cmd);
+% plot(time,states(:,1));
+% %legend('cmd','trajectory')
+% ylabel('x[m]')
+% subplot(2,1,2)
+% plot(time,z_cmd);
+% plot(time,states(:,2));
+% ylabel('z[m]')
+% xlabel('time[s]');
+% 
+% figure(2)
+% hold on
+% subplot(2,1,1)
+% plot(time,vx_cmd);
+% plot(time,states(:,3));
+% %legend('cmd','trajectory')
+% ylabel('v_x[m/s]')
+% subplot(2,1,2)
+% plot(time,vz_cmd);
+% plot(time,states(:,4));
+% ylabel('v_z[m/s]')
+% xlabel('time[s]');
+% 
+% figure(3)
+% hold on
+% subplot(2,1,1)
+% plot(time,theta_cmd);
+% plot(time,states(:,5));
+% legend('cmd','trajectory')
+% ylabel('theta[rad]')
+% subplot(2,1,2)
+% plot(time,vx_cmd);
+% plot(time,states(:,6));
+% ylabel('q[rad/s]')
+% xlabel('time[s]');
+% 
+% figure(4)
+% hold on
+% subplot(2,1,1)
+% plot(time,T_cmd);
+% ylabel('thrust cmd [N]')
+% subplot(2,1,2)
+% plot(time,M_cmd);
+% ylabel('M_cmd');
+% xlabel('time[s]');
+% 
+% 
+% 
+% figure(5)
+% hold on
+% plot(time,inputs(:,1));
+% plot(time,inputs(:,2));
 
 temp = 1;
+end
